@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        applicationId "com.example.user.bogartsbentelogmobile"
+        minSdkVersion 23
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        configurations.all {
+            resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    // implementation 'com.android.support:appcompat-v7:27.0.0'
+
+    // Library
+
+//    compile 'com.cepheuen.elegant-number-button:lib:1.0.2'
+    compile 'com.algolia:algoliasearch-android:3.+'
+    compile 'com.github.mancj:MaterialSearchBar:0.7.1'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
+    compile 'com.cepheuen.elegant-number-button:lib:1.0.2'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.firebase:firebase-core:16.0.5'
+    compile 'com.google.firebase:firebase-auth:16.0.5'
+    compile 'com.google.firebase:firebase-firestore:17.1.5'
+    compile 'info.hoang8f:fbutton:1.0.5'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.android.support:cardview-v7:27.+'
+    compile 'com.android.support:recyclerview-v7:27.+'
+    compile 'com.squareup.picasso:picasso:2.71828'
+    compile 'com.firebaseui:firebase-ui-firestore:4.1.0'
+    compile 'com.android.support:design:27.+'
+    compile 'com.google.firebase:firebase-storage:16.0.5'
+    testCompile 'junit:junit:4.12'
+}
+apply plugin: 'com.google.gms.google-services'

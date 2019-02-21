@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "312796899179",
+    "firebase_url": "https://bogartsbentelogmobile.firebaseio.com",
+    "project_id": "bogartsbentelogmobile",
+    "storage_bucket": "bogartsbentelogmobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312796899179:android:d6891e363363ecaf",
+        "android_client_info": {
+          "package_name": "com.example.user.bogartsbentelogmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312796899179-m6ujn0elljg681s955ukbdmdugql729g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.user.bogartsbentelogmobile",
+            "certificate_hash": "8b14836bd3521a2651d4d84c5fd74bf6aacd001c"
+          }
+        },
+        {
+          "client_id": "312796899179-0cj7ucjt3e210df5duiutve74l7ch8si.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCobQmMz5c3kCK2qcICN1M90ldO9hiCUxQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312796899179-0cj7ucjt3e210df5duiutve74l7ch8si.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
