@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.user.bogartsbentelogmobile.Model.Food;
 import com.example.user.bogartsbentelogmobile.Model.Order;
@@ -99,7 +100,14 @@ public class FoodDetail extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                 currFood = documentSnapshot.toObject(Food.class);
-                Picasso.get().load(currFood.getImage()).into(food_Image);
+//                Picasso.get().load(currFood.getImage()).into(food_Image);
+                GlideApp.with(FoodDetail.this)
+                        .load(currFood.getImage())
+                        .centerCrop()
+                        .fitCenter()
+                        .skipMemoryCache(false)  //No memory cache
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)   //No disk cache
+                        .into(food_Image);
 
                 food_price.setText(currFood.getPrice());
                 food_Desc.setText(currFood.getDescription());

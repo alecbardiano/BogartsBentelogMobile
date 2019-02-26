@@ -20,10 +20,10 @@
             android:id="@+id/my_toolbar_foodsearch"
             android:layout_width="368dp"
             android:layout_height="56dp"
-            android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:titleTextColor="@android:color/white"
+            android:theme="@style/ToolbarStyle"
+            app:popupTheme="@style/ToolbarStyle"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="0dp" />
 

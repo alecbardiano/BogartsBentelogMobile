@@ -209,7 +209,7 @@ public class Home extends AppCompatActivity
                 .build();
 
 
-        adapter = new RecyclerCategoryAdapter(options);
+        adapter = new RecyclerCategoryAdapter(options, this);
         adapter.setOnItemClickListener(new ItemClickListener() {
             @Override
             public void onClickItemListener(DocumentSnapshot snapshot, int position) {
@@ -312,7 +312,7 @@ public class Home extends AppCompatActivity
                 .setQuery(query,Food.class)
                 .build();
 
-        searchAdapter = new RecyclerFoodAdapter(options);
+        searchAdapter = new RecyclerFoodAdapter(options,this);
         searchAdapter.setOnItemClickListener(new ItemClickListener() {
             @Override
             public void onClickItemListener(DocumentSnapshot snapshot, int position) {
@@ -354,7 +354,7 @@ public class Home extends AppCompatActivity
                 .setQuery(query,Food.class)
                 .build();
 
-        searchAdapter = new RecyclerFoodAdapter(options);
+        searchAdapter = new RecyclerFoodAdapter(options,this);
         searchAdapter.setOnItemClickListener(new ItemClickListener() {
             @Override
             public void onClickItemListener(DocumentSnapshot snapshot, int position) {

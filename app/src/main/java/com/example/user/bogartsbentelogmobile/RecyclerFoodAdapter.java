@@ -1,10 +1,12 @@
 package com.example.user.bogartsbentelogmobile;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.user.bogartsbentelogmobile.Interface.ItemClickListener;
 import com.example.user.bogartsbentelogmobile.Model.Food;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -24,15 +26,17 @@ public class RecyclerFoodAdapter extends FirestoreRecyclerAdapter<Food,RecyclerF
     FoodMenu foodActivity;
     private ItemClickListener listener;
     private List<Food> foods;
+    private Context context;
 
 //    public RecyclerCategoryAdapter(@NonNull FirestoreRecyclerOptions<Category> options) {
 //        super(options);
 //
 //    }
 
-    public RecyclerFoodAdapter(@NonNull FirestoreRecyclerOptions<Food> options) {
+    public RecyclerFoodAdapter(@NonNull FirestoreRecyclerOptions<Food> options, Context context) {
 
         super(options);
+        this.context = context;
     }
 
 
@@ -42,7 +46,14 @@ public class RecyclerFoodAdapter extends FirestoreRecyclerAdapter<Food,RecyclerF
         holder.foodName.setText(model.getName());
 //        holder.foodDesc.setText(model.getName());
 //        holder.foodPrice.setText(model.getName());
-        Picasso.get().load(model.getImage()).into(holder.foodImage);
+//        Picasso.get().load(model.getImage()).into(holder.foodImage);
+        GlideApp.with(this.context)
+                .load(model.getImage())
+                .centerCrop()
+                .fitCenter()
+                .skipMemoryCache(false)  //No memory cache
+                .diskCacheStrategy(DiskCacheStrategy.ALL)   //No disk cache
+                .into(holder.foodImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

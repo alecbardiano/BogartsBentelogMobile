@@ -134,7 +134,7 @@ public class FoodMenu extends AppCompatActivity {
                 .build();
 
 
-        adapter = new RecyclerFoodAdapter(options);
+        adapter = new RecyclerFoodAdapter(options,this);
         adapter.setOnItemClickListener(new ItemClickListener() {
             @Override
             public void onClickItemListener(DocumentSnapshot snapshot, int position) {
@@ -207,7 +207,7 @@ public class FoodMenu extends AppCompatActivity {
                 .build();
 
 
-        adapter = new RecyclerFoodAdapter(options);
+        adapter = new RecyclerFoodAdapter(options, this);
         adapter.setOnItemClickListener(new ItemClickListener() {
             @Override
             public void onClickItemListener(DocumentSnapshot snapshot, int position) {

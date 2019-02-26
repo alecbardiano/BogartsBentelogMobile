@@ -83,7 +83,7 @@ public class SearchFood extends AppCompatActivity {
                 .build();
 
 
-        adapter = new RecyclerFoodAdapter(options);
+        adapter = new RecyclerFoodAdapter(options,this);
         adapter.setOnItemClickListener(new ItemClickListener() {
             @Override
             public void onClickItemListener(DocumentSnapshot snapshot, int position) {
@@ -124,7 +124,7 @@ public class SearchFood extends AppCompatActivity {
             Log.d("SEARCH", s + "CHECK NOW2");
 
 
-            searchAdapter = new RecyclerFoodAdapter(options2);
+            searchAdapter = new RecyclerFoodAdapter(options2,this);
             searchAdapter.setOnItemClickListener(new ItemClickListener() {
                 @Override
                 public void onClickItemListener(DocumentSnapshot snapshot, int position) {
