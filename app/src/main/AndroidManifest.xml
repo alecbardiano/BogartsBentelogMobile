@@ -3,7 +3,7 @@
     package="com.example.user.bogartsbentelogmobile">
 
     <uses-permission android:name="android.permisson.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <meta-data
         android:name="android.support.PARENT_ACTIVITY"
@@ -19,13 +19,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:theme,android:icon">
-        <activity android:name=".MainActivity">
+
+        <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"/>
+
         <activity android:name=".SignIn">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -50,7 +54,8 @@
         <activity
             android:name=".CartActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".SearchFood"></activity>
+        <activity android:name=".SearchFood" />
+
     </application>
 
 </manifest>

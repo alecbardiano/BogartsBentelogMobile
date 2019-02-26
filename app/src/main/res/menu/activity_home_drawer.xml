@@ -8,6 +8,11 @@
             android:iconTint="@android:color/white"
             android:title="Menu" />
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_save_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="My Profile" />
+        <item
             android:id="@+id/nav_cart"
             android:icon="@drawable/ic_shopping_cart_black_24dp"
             android:iconTint="@android:color/white"
@@ -18,16 +23,19 @@
             android:iconTint="@android:color/white"
             android:title="Search Food" />
         <item
-            android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_save_black_24dp"
+            android:id="@+id/nav_search_store"
+            android:icon="@drawable/ic_local_cafe_black_24dp"
             android:iconTint="@android:color/white"
-            android:title="Profile" />
+            android:title="Search Store" />
+        <item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/ic_phone_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="Contact Us" />
         <item
             android:id="@+id/nav_log_out"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:iconTint="@android:color/white"
             android:title="Sign Out" />
             </group>
-
-
 </menu>

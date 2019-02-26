@@ -49,6 +49,7 @@ public class CartActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     final DocumentReference ref = db.collection("Users").document(currUser.getID());
     int totalPriceOfFoods;
+    final ArrayList <Order> orderList = new ArrayList<>();
 
     TextView totalPrice;
     FButton buttonPlaceOrder;
@@ -70,6 +71,11 @@ public class CartActivity extends AppCompatActivity {
         buttonPlaceOrder = (FButton)findViewById(R.id.buttonPlaceOrder);
 
         loadCartFoods();
+
+        if (orderList.isEmpty()){
+            buttonPlaceOrder.setEnabled(false);
+        }
+
 
         buttonPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +104,7 @@ public class CartActivity extends AppCompatActivity {
         });
 
 
+
     }
 
     private void setUpRecyclerView(){
@@ -113,7 +120,7 @@ public class CartActivity extends AppCompatActivity {
 
 
 
-        final ArrayList <Order> orderList = new ArrayList<>();
+
         Map<String, Object> requests = new HashMap<>();
 
         requests.put("Address", currUser.getAddress());
@@ -131,6 +138,7 @@ public class CartActivity extends AppCompatActivity {
 
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Order order = document.toObject(Order.class);
+
                                 orderList.add(order);
                             }
                         } else {

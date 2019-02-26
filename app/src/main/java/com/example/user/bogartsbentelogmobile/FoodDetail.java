@@ -5,6 +5,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,20 +17,29 @@ import com.example.user.bogartsbentelogmobile.Model.Food;
 import com.example.user.bogartsbentelogmobile.Model.Order;
 import com.google.android.gms.common.internal.Objects;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.Transaction;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import static com.example.user.bogartsbentelogmobile.Common.Common.currUser;
 
@@ -43,6 +53,7 @@ public class FoodDetail extends AppCompatActivity {
     FloatingActionButton cartButton;
     ElegantNumberButton elegantNumberButton;
 
+    private static ListenerRegistration listener;
     String foodID = "";
 
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -119,27 +130,98 @@ public class FoodDetail extends AppCompatActivity {
 
     }
 
-        private static void addOrderToCart(Order order) {
+        private static void addOrderToCart(final Order order) {
 //        Random random = new Random();
+
+
+//            .runTransaction();
+            final DocumentReference sfDocRef = db.collection("Users").document(currUser.getID()).collection("Cart").document(order.getProductID());
+
+            listener = sfDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.d("ERROR", e.getMessage());
+                        return;
+                    }
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        Order order2 = documentSnapshot.toObject(Order.class);
+                        int newQuantity = Integer.parseInt(order2.getQuantity()) + Integer.parseInt(order.getQuantity());
+                        sfDocRef.update("quantity",Integer.toString(newQuantity));
+                        listener.remove();
+                    }else{
+                        Map<String,Object> dataMap = new HashMap<>();
+                        dataMap.put("ProductID", order.getProductID());
+                        dataMap.put("productName", order.getProductName());
+                        dataMap.put("quantity", order.getQuantity());
+                        dataMap.put("price", order.getPrice());
+                        dataMap.put("latestUpdateTimestamp", FieldValue.serverTimestamp());
+                        db.collection("Users").document(currUser.getID()).collection("Cart").document(order.getProductID())
+                                .set(dataMap)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                    }
+                                });
+                    }
+                }
+            });
+
+
+
+//            db.runTransaction(new Transaction.Function<Void>() {
+//                @Override
+//                public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+//                    DocumentSnapshot snapshot = transaction.get(sfDocRef);
+//                    double newQuantity = snapshot.getDouble("quantity") + Double.parseDouble(order.getQuantity());
+//                    transaction.update(sfDocRef, "quantity", newQuantity);
+//
+//
+//                    // Success
+//                    return null;
+//                }
+//            }).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                @Override
+//                public void onSuccess(Void aVoid) {
+////                    Log.d(TAG, "Transaction success!");
+//                }
+//            })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//
+//                        }
+//                    });;
 
             // order.getproductID if else
 
-            Map<String,Object> dataMap = new HashMap<>();
-            dataMap.put("ProductID", order.getProductID());
-            dataMap.put("productName", order.getProductName());
-            dataMap.put("quantity", order.getQuantity());
-            dataMap.put("price", order.getPrice());
-            dataMap.put("latestUpdateTimestamp", FieldValue.serverTimestamp());
+
+
+
+
+
+
+
 
             CollectionReference ref = db.collection("Users").document(currUser.getID()).collection("Cart");
 
-            db.collection("Users").document(currUser.getID()).collection("Cart").document()
-                    .set(dataMap)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
+//            ref
+//            .get()
+//            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Order order = document.toObject(Order.class);
+//                            if (order.getQuantity())
+//                        }
+//                    } else {
+////                        Log.d(TAG, "Error getting documents: ", task.getException());
+//                    }
+//                }
+//            });
 
-                        }
-                    });
+
     }
 }
