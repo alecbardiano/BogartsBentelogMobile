@@ -137,6 +137,7 @@ public class FoodDetail extends AppCompatActivity {
 //            .runTransaction();
             final DocumentReference sfDocRef = db.collection("Users").document(currUser.getID()).collection("Cart").document(order.getProductID());
 
+
             listener = sfDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -144,7 +145,7 @@ public class FoodDetail extends AppCompatActivity {
                         Log.d("ERROR", e.getMessage());
                         return;
                     }
-                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                    if (documentSnapshot.exists()) {
                         Order order2 = documentSnapshot.toObject(Order.class);
                         int newQuantity = Integer.parseInt(order2.getQuantity()) + Integer.parseInt(order.getQuantity());
                         sfDocRef.update("quantity",Integer.toString(newQuantity));
@@ -164,63 +165,11 @@ public class FoodDetail extends AppCompatActivity {
 
                                     }
                                 });
+                        listener.remove();
                     }
+
                 }
             });
-
-
-
-//            db.runTransaction(new Transaction.Function<Void>() {
-//                @Override
-//                public Void apply(Transaction transaction) throws FirebaseFirestoreException {
-//                    DocumentSnapshot snapshot = transaction.get(sfDocRef);
-//                    double newQuantity = snapshot.getDouble("quantity") + Double.parseDouble(order.getQuantity());
-//                    transaction.update(sfDocRef, "quantity", newQuantity);
-//
-//
-//                    // Success
-//                    return null;
-//                }
-//            }).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                @Override
-//                public void onSuccess(Void aVoid) {
-////                    Log.d(TAG, "Transaction success!");
-//                }
-//            })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//
-//                        }
-//                    });;
-
-            // order.getproductID if else
-
-
-
-
-
-
-
-
-
-            CollectionReference ref = db.collection("Users").document(currUser.getID()).collection("Cart");
-
-//            ref
-//            .get()
-//            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Order order = document.toObject(Order.class);
-//                            if (order.getQuantity())
-//                        }
-//                    } else {
-////                        Log.d(TAG, "Error getting documents: ", task.getException());
-//                    }
-//                }
-//            });
 
 
     }

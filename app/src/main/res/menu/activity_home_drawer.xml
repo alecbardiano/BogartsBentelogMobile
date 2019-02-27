@@ -13,10 +13,10 @@
             android:iconTint="@android:color/white"
             android:title="My Profile" />
         <item
-            android:id="@+id/nav_cart"
+            android:id="@+id/nav_my_orders"
             android:icon="@drawable/ic_shopping_cart_black_24dp"
             android:iconTint="@android:color/white"
-            android:title="Cart" />
+            android:title="My Orders" />
         <item
             android:id="@+id/nav_search_food"
             android:icon="@drawable/ic_search_black_24dp"

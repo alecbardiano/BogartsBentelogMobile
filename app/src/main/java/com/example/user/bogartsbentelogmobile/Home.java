@@ -277,11 +277,15 @@ public class Home extends AppCompatActivity
         } else if (id == R.id.nav_search_food) {
             startActivity(new Intent(Home.this, SearchFood.class));
         }
+        else if( id == R.id.nav_my_orders){
+            startActivity(new Intent(Home.this, OrderActivity.class));
+        }
         else if (id == R.id.nav_search_store) {
 //            startActivity(new Intent(Home.this, SearchFood.class));
         }
         else if (id == R.id.nav_contact) {
 //            startActivity(new Intent(Home.this, SearchFood.class));
+            startActivity(new Intent(Home.this, FranchiseActivity.class));
         }
         else if (id == R.id.nav_log_out) {
             Intent signIn = new Intent(Home.this, MainActivity.class);

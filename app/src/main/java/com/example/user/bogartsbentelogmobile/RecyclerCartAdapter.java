@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.user.bogartsbentelogmobile.Model.Category;
@@ -44,19 +45,35 @@ public class RecyclerCartAdapter  extends FirestoreRecyclerAdapter<Order,Recycle
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 
+
     @Override
-    protected void onBindViewHolder(@NonNull RecyclerCartHolder holder, int position, @NonNull Order model) {
-        TextDrawable drawable = TextDrawable.builder().buildRound("" + model.getQuantity(), Color.RED);
+    protected void onBindViewHolder(@NonNull RecyclerCartHolder holder, final int position, @NonNull final Order model) {
+//        TextDrawable drawable = TextDrawable.builder().buildRound("" + model.getQuantity(), Color.RED);
 
 
         int price = (Integer.parseInt(model.getPrice()) * (Integer.parseInt(model.getQuantity())));
         Locale locale = new Locale("tl", "PH");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale); // Philippines
 
-        holder.cartFoodCount.setImageDrawable(drawable);
+        holder.cartFoodCount.setText(model.getQuantity());
         holder.cartPricePerPiece.setText(format.format(Integer.parseInt(model.getPrice())));
         holder.cartFoodPrice.setText(format.format(price));
         holder.cartFoodName.setText(model.getProductName());
+
+        holder.addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSnapshots().getSnapshot(position).getReference().update("quantity", Integer.toString((Integer.parseInt(model.getQuantity()) + 1)));
+            }
+        });
+
+        holder.subButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSnapshots().getSnapshot(position).getReference().update("quantity", Integer.toString((Integer.parseInt(model.getQuantity()) - 1)));
+            }
+        });
+
 
 //        Tagalog, Philippines (tl_PH)
     }

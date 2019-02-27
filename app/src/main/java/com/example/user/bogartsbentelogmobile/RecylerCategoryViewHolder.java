@@ -16,14 +16,10 @@ import org.w3c.dom.Text;
 
 public class RecylerCategoryViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView categoryName,categoryPriority;
-    public ItemClickListener listener;
+    public TextView categoryName;
     public ImageView categoryImage;
-    RecyclerCategoryAdapter adapter;
 
 //    adapter.getSnapshots();
-
-
 
     public RecylerCategoryViewHolder(View itemView) {
         super(itemView);
