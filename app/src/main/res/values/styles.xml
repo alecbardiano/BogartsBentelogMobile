@@ -54,4 +54,5 @@
         <item name="android:windowBackground">@drawable/backgroundfranchise</item>
     </style>
 
+
 </resources>

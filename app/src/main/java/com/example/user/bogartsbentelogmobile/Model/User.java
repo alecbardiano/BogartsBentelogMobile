@@ -9,42 +9,36 @@ import java.util.Date;
  */
 
 public class User {
-    private String Email;
+    private String email;
     private String lastName;
     private String firstName;
     private String middleInit;
     private String contactNumber;
-    private String Address;
+    private String address;
     private String ID;
+    private boolean isStaff;
 
     public User(){
 
     }
 
-    public User(String email, String lastname, String firstname, String middleinit, String cNumber, String address) {
-        Email = email;
-        lastName = lastname;
-        firstName = firstname;
-        middleInit = middleinit;
-        contactNumber = cNumber;
-        Address = address;
-
+    public User(String email, String lastName, String firstName, String middleInit, String contactNumber, String address, String ID, boolean isStaff) {
+        this.email = email;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.middleInit = middleInit;
+        this.contactNumber = contactNumber;
+        this.address = address;
+        this.ID = ID;
+        this.isStaff = isStaff;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
-    }
-
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
+        this.email = email;
     }
 
     public String getLastName() {
@@ -80,10 +74,26 @@ public class User {
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public boolean isStaff() {
+        return isStaff;
+    }
+
+    public void setStaff(boolean staff) {
+        isStaff = staff;
     }
 }

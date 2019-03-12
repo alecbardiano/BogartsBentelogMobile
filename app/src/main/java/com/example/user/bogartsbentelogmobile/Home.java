@@ -69,11 +69,6 @@ public class Home extends AppCompatActivity
     ArrayList<Category> categArrayList;
     final CollectionReference categRef = db.collection("Category");
 
-    Client client = new Client("QESWFYOCCZ","43d7b481f17a76a27e2b286d0b8ab8e4");
-    Index index = client.getIndex("foods");
-
-    private List<Food> foods;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -281,7 +276,7 @@ public class Home extends AppCompatActivity
             startActivity(new Intent(Home.this, OrderActivity.class));
         }
         else if (id == R.id.nav_search_store) {
-//            startActivity(new Intent(Home.this, SearchFood.class));
+            startActivity(new Intent(Home.this, SearchStore.class));
         }
         else if (id == R.id.nav_contact) {
 //            startActivity(new Intent(Home.this, SearchFood.class));

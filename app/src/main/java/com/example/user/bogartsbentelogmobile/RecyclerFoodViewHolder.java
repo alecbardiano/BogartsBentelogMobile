@@ -14,15 +14,15 @@ import com.example.user.bogartsbentelogmobile.Interface.ItemClickListener;
 
 public class RecyclerFoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public TextView foodName,foodDesc,foodPrice;
-    public ImageView foodImage;
+        public ImageView foodImage;
 //    public ImageView categoryImage;
     public RecyclerFoodViewHolder(View itemView) {
-        super(itemView);
+            super(itemView);
 
-        this.foodName = itemView.findViewById(R.id.food_name);
+            this.foodName = itemView.findViewById(R.id.food_name);
 //        this.foodDesc = itemView.findViewById(R.id.food_desc);
 //        this.foodPrice = itemView.findViewById(R.id.food_prce);
-        this.foodImage = itemView.findViewById(R.id.food_image);
+            this.foodImage = itemView.findViewById(R.id.food_image);
 
     }
 

@@ -147,6 +147,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         user.put("address", Address);
         user.put("email", email);
         user.put("id", id);
+        user.put("isStaff", false);
         users.document(id).set(user);
     }
 

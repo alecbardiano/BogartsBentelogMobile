@@ -237,6 +237,8 @@ public class CartActivity extends AppCompatActivity {
         requests.put("Phone", currUser.getContactNumber());
         requests.put("status", "0");
         requests.put("total", Integer.toString(total));
+        requests.put("dateOfOrder",FieldValue.serverTimestamp());
+        requests.put("userID",currUser.getID());
 
         db.collection("Users").document(currUser.getID()).collection("Cart")
                 .get()

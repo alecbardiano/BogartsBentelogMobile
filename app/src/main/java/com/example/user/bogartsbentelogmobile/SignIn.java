@@ -130,10 +130,8 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                                                             if (snap.exists()){
                                                                 User user = snap.toObject(User.class);
                                                                 Common.currUser = user;
-
                                                                 startActivity(new Intent(getApplicationContext(), Home.class));
                                                                 finish();
-
                                                             }
                                                         }
                                                     }
