@@ -50,6 +50,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-places:16.0.0'
 
 
+
     compile 'com.algolia:algoliasearch-android:3.+'
     compile 'com.github.mancj:MaterialSearchBar:0.7.1'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'

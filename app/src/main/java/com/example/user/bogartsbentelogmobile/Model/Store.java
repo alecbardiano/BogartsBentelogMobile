@@ -6,16 +6,16 @@ package com.example.user.bogartsbentelogmobile.Model;
 
 public class Store {
 
-    private String nameOfBranch,storeID,address, contactno;
+    private String nameOfBranch,storeID,address, contactNo;
 
     public Store (){
 
     }
-    public Store(String nameOfBranch, String storeID, String address, String contactno) {
+    public Store(String nameOfBranch, String storeID, String address, String contactNo) {
         this.nameOfBranch = nameOfBranch;
         this.storeID = storeID;
         this.address = address;
-        this.contactno = contactno;
+        this.contactNo = contactNo;
     }
 
     public String getNameOfBranch() {
@@ -42,11 +42,11 @@ public class Store {
         this.address = address;
     }
 
-    public String getContactno() {
-        return contactno;
+    public String getContactNo() {
+        return contactNo;
     }
 
-    public void setContactno(String contactno) {
-        this.contactno = contactno;
+    public void setContactNo(String contactno) {
+        this.contactNo = contactno;
     }
 }

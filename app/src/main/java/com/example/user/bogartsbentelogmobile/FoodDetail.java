@@ -1,11 +1,14 @@
 package com.example.user.bogartsbentelogmobile;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -72,6 +75,11 @@ public class FoodDetail extends AppCompatActivity {
         food_price = (TextView)findViewById(R.id.food_detail_price);
         food_Image = (ImageView)findViewById(R.id.food_detail_img);
 
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_foodDetail);
+//        setSupportActionBar(myToolbar);
+
+
+
         collapsingToolbarLayout = findViewById(R.id.collapsing);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppbar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedBar);
@@ -97,6 +105,11 @@ public class FoodDetail extends AppCompatActivity {
                 Toast.makeText(FoodDetail.this,"Successfully Added to cart!", Toast.LENGTH_SHORT).show();
             }
         });
+
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setTitle(currFood.getName());
+//        }
 
     }
 
@@ -171,6 +184,24 @@ public class FoodDetail extends AppCompatActivity {
                 }
             });
 
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    public void onBackPressed(){
+
+        Intent i = new Intent(FoodDetail.this, Home.class);
+        startActivity(i);
 
     }
 }

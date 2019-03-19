@@ -3,6 +3,9 @@ package com.example.user.bogartsbentelogmobile;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -38,6 +41,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -51,6 +55,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
+import java.util.Locale;
+
 public class SearchStore extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -63,7 +70,7 @@ public class SearchStore extends AppCompatActivity implements
     private Location lastLoc;
     private Marker currentUserMark;
     RecyclerView recylerView;
-    RecyclerStoreAdapter adapter;
+    RecyclerStoreAdapter adapter,searchAdapter;
 
 
     private static final int Request_User_Location_Code = 99;
@@ -80,6 +87,7 @@ public class SearchStore extends AppCompatActivity implements
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_searchstore);
         setSupportActionBar(myToolbar);
+
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -137,19 +145,58 @@ public class SearchStore extends AppCompatActivity implements
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-//                searchFood(query);
+                searchStore(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.d("SEARCH", newText + "CHECK NOW");
-//                searchFood(newText);
+                searchStore(newText);
                 return false;
 
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void searchStore(String query) {
+
+        if (query != null && !query.isEmpty() && !query.equals("null")) {
+
+            Query query2 = db.collection("Stores").orderBy("nameOfBranch").startAt(query).endAt(query + "\uf8ff");
+
+//
+            FirestoreRecyclerOptions<Store> options2 = new FirestoreRecyclerOptions.Builder<Store>()
+                    .setQuery(query2,Store.class)
+                    .build();
+
+            Log.d("SEARCH", query + "CHECK NOW2");
+
+
+            searchAdapter = new RecyclerStoreAdapter(options2);
+//            searchAdapter.setOnItemClickListener(new ItemClickListener() {
+//                @Override
+//                public void onClickItemListener(DocumentSnapshot snapshot, int position) {
+//                    String id = snapshot.getId();
+//
+//                    Intent foodDetail = new Intent(SearchStore.this,FoodDetail.class);
+//                    foodDetail.putExtra("FoodID", id);
+//                    Toast.makeText(SearchStore.this, "foodid"+ id, Toast.LENGTH_SHORT).show();
+//                    startActivity(foodDetail);
+//
+//                }
+//
+//            });
+            adapter.stopListening();
+            recylerView.setAdapter(searchAdapter);
+            searchAdapter.startListening();
+
+        }else{
+            searchAdapter.stopListening();
+            loadStoreData();
+            adapter.startListening();
+        }
     }
 
     @Override
@@ -193,9 +240,9 @@ public class SearchStore extends AppCompatActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng sydney = new LatLng(14.5995,120.9842);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng manila = new LatLng(14.5995,120.9842);
+        mMap.addMarker(new MarkerOptions().position(manila).title("Marker in Manila"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(manila));
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 10.0f ) );
 
         db.collection("Stores")
@@ -213,6 +260,10 @@ public class SearchStore extends AppCompatActivity implements
                                     double lng = geo.getLongitude();
                                     LatLng latLng = new LatLng(lat, lng);
                                     mMap.addMarker(new MarkerOptions().position(latLng).title(name));
+//                                    mMap.addCircle(new CircleOptions().center(latLng).radius(3000)
+//                                            .strokeColor(Color.BLUE)
+//                                            .fillColor(0x220000)
+//                                            .strokeWidth(5.0f));
                                 }
 
                             }

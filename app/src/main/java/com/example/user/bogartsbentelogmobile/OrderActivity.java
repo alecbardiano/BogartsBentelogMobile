@@ -1,10 +1,14 @@
 package com.example.user.bogartsbentelogmobile;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.example.user.bogartsbentelogmobile.Model.Order;
 import com.example.user.bogartsbentelogmobile.Model.Request;
@@ -34,6 +38,16 @@ public class OrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_order);
+        setSupportActionBar(myToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("My Order History");
+        }
+
+
         setUpRecyclerView();
 
         loadRequests();
@@ -67,6 +81,26 @@ public class OrderActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    public void onBackPressed(){
+
+        Intent i = new Intent(OrderActivity.this, Home.class);
+        startActivity(i);
+
     }
 
     protected void onStart (){

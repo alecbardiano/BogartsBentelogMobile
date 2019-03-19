@@ -23,55 +23,107 @@
             android:layout_weight="9"
             android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|start"
+                android:textAllCaps="true"
+                android:text="Name of Customer: " />
             <TextView
                 android:id="@+id/req_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|start"
                 android:textAllCaps="true"
-                android:layout_marginLeft="10dp"
                 android:text="Name of Customer"
                 />
-
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|start"
+                    android:textAllCaps="true"
+                    android:text="Address of Customer: " />
             <TextView
                 android:id="@+id/req_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|start"
                 android:textAllCaps="true"
-                android:layout_marginLeft="10dp"
                 android:text="Address of Customer"
                 />
-
+                </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|start"
+                    android:textAllCaps="true"
+                    android:text="Status of Order: " />
             <TextView
                 android:id="@+id/req_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|start"
                 android:textAllCaps="true"
-                android:layout_marginLeft="10dp"
                 android:text="Status of Order"
                 />
-
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|start"
+                    android:textAllCaps="true"
+                    android:text="Total Price: " />
             <TextView
                 android:id="@+id/req_totalOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|start"
                 android:textAllCaps="true"
-                android:layout_marginLeft="10dp"
                 android:text="total price of Order"
                 />
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|start"
+                    android:textAllCaps="true"
+                    android:text="Date of Order: " />
             <TextView
                 android:id="@+id/req_dateOrder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|start"
                 android:textAllCaps="true"
-                android:layout_marginLeft="10dp"
-                android:text="Status of Order"
+                android:text="Date of Order"
                 />
-
+</LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

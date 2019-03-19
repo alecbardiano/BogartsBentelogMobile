@@ -1,6 +1,7 @@
 package com.example.user.bogartsbentelogmobile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -49,7 +50,9 @@ public class RecyclerCartAdapter  extends FirestoreRecyclerAdapter<Order,Recycle
     @Override
     protected void onBindViewHolder(@NonNull RecyclerCartHolder holder, final int position, @NonNull final Order model) {
 //        TextDrawable drawable = TextDrawable.builder().buildRound("" + model.getQuantity(), Color.RED);
-
+        if(Integer.parseInt(model.getQuantity()) == 0){
+            deleteFoodInCart(position);
+        }
 
         int price = (Integer.parseInt(model.getPrice()) * (Integer.parseInt(model.getQuantity())));
         Locale locale = new Locale("tl", "PH");
@@ -70,6 +73,9 @@ public class RecyclerCartAdapter  extends FirestoreRecyclerAdapter<Order,Recycle
         holder.subButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(Integer.parseInt(model.getQuantity()) == 0){
+                    deleteFoodInCart(position);
+                }
                 getSnapshots().getSnapshot(position).getReference().update("quantity", Integer.toString((Integer.parseInt(model.getQuantity()) - 1)));
             }
         });

@@ -20,6 +20,7 @@ public class FranchiseActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Contact Us");
         }
     }
 

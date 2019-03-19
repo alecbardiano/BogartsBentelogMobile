@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context="com.example.user.bogartsbentelogmobile.FoodDetail">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar_foodDetail"
+        android:layout_width="368dp"
+        android:layout_height="56dp"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"

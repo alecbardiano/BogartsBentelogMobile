@@ -29,6 +29,7 @@ public class RecyclerStoreAdapter extends FirestoreRecyclerAdapter<Store,Recycle
     protected void onBindViewHolder(@NonNull RecyclerStoreHolder holder, int position, @NonNull Store model) {
         holder.branchName.setText(model.getNameOfBranch());
         holder.branchAddress.setText(model.getAddress());
+        holder.branchContactNumber.setText(model.getContactNo());
     }
 
     @NonNull

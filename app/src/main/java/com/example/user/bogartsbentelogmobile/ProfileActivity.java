@@ -51,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("My Profile");
         }
 
         firebaseAuth = FirebaseAuth.getInstance();

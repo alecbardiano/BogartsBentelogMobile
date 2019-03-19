@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.user.bogartsbentelogmobile.Common.Common;
 import com.example.user.bogartsbentelogmobile.Model.Request;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.example.user.bogartsbentelogmobile.Model.Order;
 
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -31,12 +33,18 @@ public class RecyclerOrderAdapter extends FirestoreRecyclerAdapter<Request,Recyc
 
     @Override
     protected void onBindViewHolder(@NonNull RecyclerOrderHolder holder, int position, @NonNull Request model) {
-        holder.reqTotalPriceOrder.setText(model.getTotal());
-        holder.reqStatusOfOrder.setText(model.getStatus());
+
+        Locale locale = new Locale("tl", "PH");
+        NumberFormat format = NumberFormat.getCurrencyInstance(locale);
+        holder.reqTotalPriceOrder.setText(format.format(Integer.parseInt(model.getTotal())));
+//        holder.reqStatusOfOrder.setText(model.getStatus());
         holder.reqAddressOfCustomer.setText(model.getAddress());
         holder.reqNameOfCustomer.setText(model.getName());
+        holder.reqStatusOfOrder.setText(Common.convertCodeToStatus(model.getStatus()));
         String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(model.getDateOfOrder());
         holder.reqDateOfOrder.setText(currentDateTimeString);
+
+
 
     }
 

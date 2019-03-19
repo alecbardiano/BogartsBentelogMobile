@@ -50,6 +50,7 @@ public class FoodMenu extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Food");
         }
         setUpRecyclerView();
 

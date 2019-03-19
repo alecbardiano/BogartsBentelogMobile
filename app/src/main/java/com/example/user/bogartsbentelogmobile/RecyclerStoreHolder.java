@@ -10,12 +10,13 @@ import android.widget.TextView;
 
 public class RecyclerStoreHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    TextView branchName, branchAddress;
+    TextView branchName, branchAddress, branchContactNumber;
 
     public RecyclerStoreHolder(View itemView) {
         super(itemView);
         branchName = (TextView)itemView.findViewById(R.id.store_name);
         branchAddress = (TextView)itemView.findViewById(R.id.store_address);
+        branchContactNumber = (TextView)itemView.findViewById(R.id.store_contactNo);
     }
 
     @Override
