@@ -55,6 +55,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -237,12 +238,14 @@ public class SearchStore extends AppCompatActivity implements
 
     }
 
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng manila = new LatLng(14.5995,120.9842);
-        mMap.addMarker(new MarkerOptions().position(manila).title("Marker in Manila"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(manila));
+        LatLng laguna = new LatLng(14.1877, 121.1251);
+//        mMap.addMarker(new MarkerOptions().position(manila).title("Marker in Manila"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(laguna));
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 10.0f ) );
 
         db.collection("Stores")

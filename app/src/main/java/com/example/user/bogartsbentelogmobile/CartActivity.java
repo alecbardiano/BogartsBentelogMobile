@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,6 +31,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+
 
 import com.example.user.bogartsbentelogmobile.Common.Common;
 import com.example.user.bogartsbentelogmobile.Interface.ItemClickListener;
@@ -64,8 +72,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -131,6 +141,12 @@ public class CartActivity extends AppCompatActivity{
         buttonPlaceOrder = (FButton) findViewById(R.id.buttonPlaceOrder);
         txtLat = (TextView)findViewById(R.id.textview1);
 
+        Date currentTime = Calendar.getInstance().getTime();
+
+
+
+
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         locationRequest = LocationRequest.create();
@@ -186,71 +202,111 @@ public class CartActivity extends AppCompatActivity{
         buttonPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertConfirmAddress = new AlertDialog.Builder(CartActivity.this);
-                alertConfirmAddress.setTitle("Please Confirm Address");
-                alertConfirmAddress.setMessage("Do you want to deliver to new address?");
+
+                try {
+                    String string1 = "8:00:00";
+                    Date time1 = new SimpleDateFormat("HH:mm:ss").parse(string1);
+                    Calendar calendar1 = Calendar.getInstance();
+                    calendar1.setTime(time1);
+
+                    String string2 = "22:00:00";
+                    Date time2 = new SimpleDateFormat("HH:mm:ss").parse(string2);
+                    Calendar calendar2 = Calendar.getInstance();
+                    calendar2.setTime(time2);
+                    calendar2.add(Calendar.DATE, 1);
+
+//                    String someRandomTime = "01:00:00";
+                    Date now = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                    String strDate = sdf.format(now);
+                    Date d = new SimpleDateFormat("HH:mm:ss").parse(strDate);
+                    Calendar calendar3 = Calendar.getInstance();
+                    calendar3.setTime(d);
+                    calendar3.add(Calendar.DATE, 1);
+
+                    Date x = calendar3.getTime();
+                    if (x.after(calendar1.getTime()) && x.before(calendar2.getTime())) {
+                        //checkes whether the current time is between 14:49:00 and 20:11:13.
+                        Log.d("CartActivity", "OPEN STORE");
+                        alertConfirmAddress = new AlertDialog.Builder(CartActivity.this);
+                        alertConfirmAddress.setTitle("Please Confirm Address");
+                        alertConfirmAddress.setMessage("Deliver to your current location?");
 
 
-                alertConfirmAddress.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertConfirm = new AlertDialog.Builder(CartActivity.this);
-                        alertConfirm.setTitle("Please Confirm");
-                        alertConfirm.setMessage("The order will be placed once you click the Yes Button After you typed the new Address");
-                        final EditText editAddress = new EditText(CartActivity.this);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.MATCH_PARENT
-                        );
-                        editAddress.setLayoutParams(lp);
-                        alertConfirm.setView(editAddress);
-                        alertConfirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        alertConfirmAddress.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (totalPriceOfFoods <= 100) {
-                                    Toast.makeText(CartActivity.this, "Total price must be greater than or equal to 100", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    addCartToRequest(totalPriceOfFoods, editAddress.getText().toString());
-                                }
+
+                                alertConfirm2 = new AlertDialog.Builder(CartActivity.this);
+                                alertConfirm2.setTitle("Please Confirm");
+                                alertConfirm2.setMessage("The order will be placed once you click the Yes Button");
+
+                                alertConfirm2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (totalPriceOfFoods <= 100) {
+                                            Toast.makeText(CartActivity.this, "Total price must be greater than or equal to 100", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            addCartToRequest(totalPriceOfFoods);
+                                        }
+                                    }
+                                });
+                                alertConfirm2.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                alertConfirm2.show();
                             }
                         });
-                        alertConfirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+
+                        alertConfirmAddress.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                                alertConfirm = new AlertDialog.Builder(CartActivity.this);
+                                alertConfirm.setTitle("Please Confirm");
+                                alertConfirm.setMessage("The order will be placed once you click the Yes Button After you typed the new Address");
+                                final EditText editAddress = new EditText(CartActivity.this);
+                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT
+                                );
+                                editAddress.setLayoutParams(lp);
+                                alertConfirm.setView(editAddress);
+                                alertConfirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (totalPriceOfFoods <= 100) {
+                                            Toast.makeText(CartActivity.this, "Total price must be greater than or equal to 100", Toast.LENGTH_SHORT).show();
+
+                                        } else {
+                                            addCartToRequest(totalPriceOfFoods, editAddress.getText().toString());
+                                        }
+                                    }
+                                });
+                                alertConfirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                alertConfirm.show();
                             }
                         });
-                        alertConfirm.show();
+
+                        alertConfirmAddress.show();
+
+                    }else{
+                        Log.d("CartActivity", "CLOSED STORE");
+                        Toast.makeText(CartActivity.this, "Sorry delivery is between 8:00 am - 10:00pm only", Toast.LENGTH_SHORT).show();
+                        return;
+
                     }
-                });
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
 
-                alertConfirmAddress.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertConfirm2 = new AlertDialog.Builder(CartActivity.this);
-                        alertConfirm2.setTitle("Please Confirm");
-                        alertConfirm2.setMessage("The order will be placed once you click the Yes Button");
-
-                        alertConfirm2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (totalPriceOfFoods <= 100) {
-                                    Toast.makeText(CartActivity.this, "Total price must be greater than or equal to 100", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    addCartToRequest(totalPriceOfFoods);
-                                }
-                            }
-                        });
-                        alertConfirm2.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                        alertConfirm2.show();
-                    }
-                });
-
-                alertConfirmAddress.show();
             }
 
         });
@@ -338,6 +394,7 @@ public class CartActivity extends AppCompatActivity{
         recylerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
+    // send to user current location
 
     private void addCartToRequest(final int total){
 
@@ -365,7 +422,6 @@ public class CartActivity extends AppCompatActivity{
                            for (QueryDocumentSnapshot document : task.getResult()) {
 
                                if(document.exists()){
-
                                    Store store = document.toObject(Store.class);
                                    float[] result = new float[1];
                                    Log.d("SearchStore", document.getId() + " => " + document.getData());
@@ -393,6 +449,7 @@ public class CartActivity extends AppCompatActivity{
                            if(minDistance >= 3000.00){
                                Toast.makeText(CartActivity.this,"Sorry you are to far from our stores",Toast.LENGTH_SHORT).show();
                            }else{
+                               final String finalNameOfBranch = nameOfBranch;
                                db.collection("Users").document(currUser.getID()).collection("Cart")
                                        .get()
                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -405,45 +462,43 @@ public class CartActivity extends AppCompatActivity{
 
                                                        orderList.add(order);
                                                    }
+                                                   db.collection("Requests")
+                                                           .add(requests)
+                                                           .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                               @Override
+                                                               public void onSuccess(DocumentReference documentReference) {
+                                                                   Toast.makeText(CartActivity.this,"added requests data",Toast.LENGTH_SHORT).show();
+                                                                   String myId = documentReference.getId();
+//
+                                                                   db.collection("Requests").document(myId)
+                                                                           .update(
+                                                                                   "orderID", myId,
+                                                                                   "storeID", finalNameOfBranch
+                                                                           );
+
+                                                                   for(int i =0; i< orderList.size(); i++){
+                                                                       Map<String, Object> foodmap = new HashMap<>();
+                                                                       foodmap.put("Name", orderList.get(i).getProductName());
+                                                                       foodmap.put("Price", orderList.get(i).getPrice());
+                                                                       foodmap.put("Quantity", orderList.get(i).getQuantity());
+                                                                       db.collection("Requests").document(myId).collection("Foods")
+                                                                               .add(foodmap)
+                                                                               .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                                   @Override
+                                                                                   public void onSuccess(DocumentReference documentReference) {
+                                                                                       Toast.makeText(CartActivity.this,"added food to requests data",Toast.LENGTH_SHORT).show();
+                                                                                   }
+                                                                               });
+                                                                   }
+                                                               }
+
+                                                           });
                                                } else {
                                                    Log.d("REQUESTS", "Error getting documents: ", task.getException());
                                                }
                                            }
                                        });
-                               final String finalNameOfBranch = nameOfBranch;
-                               db.collection("Requests")
-                                       .add(requests)
-                                       .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                           @Override
-                                           public void onSuccess(DocumentReference documentReference) {
-                                               Toast.makeText(CartActivity.this,"added requests data",Toast.LENGTH_SHORT).show();
-                                               String myId = documentReference.getId();
-//                        Map<String, Object> addIDdata = new HashMap<>();
-//                        addIDdata.put("orderID", myI);
-                                               db.collection("Requests").document(myId)
-                                                       .update(
-                                                               "orderID", myId,
-                                                               "storeID", finalNameOfBranch
-                                                       );
 
-                                               for(int i =0; i< orderList.size(); i++){
-                                                   Map<String, Object> foodmap = new HashMap<>();
-                                                   foodmap.put("Name", orderList.get(i).getProductName());
-                                                   foodmap.put("Price", orderList.get(i).getPrice());
-                                                   foodmap.put("Quantity", orderList.get(i).getQuantity());
-                                                   db.collection("Requests").document(myId).collection("Foods")
-                                                           .add(foodmap)
-                                                           .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                               @Override
-                                                               public void onSuccess(DocumentReference documentReference) {
-                                                                   Toast.makeText(CartActivity.this,"added food to requests data",Toast.LENGTH_SHORT).show();
-                                                               }
-                                                           });
-                                               }
-
-                                           }
-
-                                       });
                            }
                        }else {
                            Log.d("SearchStore", "Error getting documents: ", task.getException());
@@ -458,7 +513,7 @@ public class CartActivity extends AppCompatActivity{
 
 
     }
-    private void addCartToRequest(final int total, String address){
+    private void addCartToRequest(final int total, final String address){
 
 //        Query query = db.collection("Users").document(currUser.getID()).collection("Cart");
 
@@ -473,6 +528,7 @@ public class CartActivity extends AppCompatActivity{
         requests.put("userID",currUser.getID());
 //        requests.put("orderID"," ");
 
+        // send to address specified by user
         db.collection("Stores")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -485,7 +541,7 @@ public class CartActivity extends AppCompatActivity{
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if(document.exists()){
                                     Log.d("SearchStore", document.getId() + " => " + document.getData());
-                                    GeoPoint geo = document.getGeoPoint("location");
+                                    GeoPoint geo = getLocationFromAddress(address);
                                     String name = document.getString("storeID");
                                     double lat = geo.getLatitude();
                                     double lng = geo.getLongitude();
@@ -498,7 +554,9 @@ public class CartActivity extends AppCompatActivity{
                             }
                             if(minDistance >= 3000){        // 3 kilometers
                                 Toast.makeText(CartActivity.this,"Sorry you are to far from our stores",Toast.LENGTH_SHORT).show();
+                                return;
                             }else{
+                                final String finalNameOfBranch = nameOfBranch;
                                 db.collection("Users").document(currUser.getID()).collection("Cart")
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -509,42 +567,41 @@ public class CartActivity extends AppCompatActivity{
                                                         Order order = document.toObject(Order.class);
                                                         orderList.add(order);
                                                     }
+                                                    db.collection("Requests")
+                                                            .add(requests)
+                                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                @Override
+                                                                public void onSuccess(DocumentReference documentReference) {
+                                                                    Toast.makeText(CartActivity.this,"added requests data",Toast.LENGTH_SHORT).show();
+                                                                    String myId = documentReference.getId();
+                                                                    db.collection("Requests").document(myId)
+                                                                            .update(
+                                                                                    "orderID", myId,
+                                                                                    "storeID", finalNameOfBranch
+                                                                            );
+                                                                    for(int i =0; i< orderList.size(); i++){
+                                                                        Map<String, Object> foodmap = new HashMap<>();
+                                                                        foodmap.put("Name", orderList.get(i).getProductName());
+                                                                        foodmap.put("Price", orderList.get(i).getPrice());
+                                                                        foodmap.put("Quantity", orderList.get(i).getQuantity());
+                                                                        db.collection("Requests").document(myId).collection("Foods")
+                                                                                .add(foodmap)
+                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(DocumentReference documentReference) {
+                                                                                        Toast.makeText(CartActivity.this,"added food to requests data",Toast.LENGTH_SHORT).show();
+                                                                                    }
+                                                                                });
+                                                                    }
+                                                                }
+
+                                                            });
                                                 } else {
                                                     Log.d("REQUESTS", "Error getting documents: ", task.getException());
                                                 }
                                             }
                                         });
-                                final String finalNameOfBranch = nameOfBranch;
-                                db.collection("Requests")
-                                        .add(requests)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Toast.makeText(CartActivity.this,"added requests data",Toast.LENGTH_SHORT).show();
-                                                String myId = documentReference.getId();
-                                                db.collection("Requests").document(myId)
-                                                        .update(
-                                                                "orderID", myId,
-                                                                "storeID", finalNameOfBranch
-                                                        );
-                                                for(int i =0; i< orderList.size(); i++){
-                                                    Map<String, Object> foodmap = new HashMap<>();
-                                                    foodmap.put("Name", orderList.get(i).getProductName());
-                                                    foodmap.put("Price", orderList.get(i).getPrice());
-                                                    foodmap.put("Quantity", orderList.get(i).getQuantity());
-                                                    db.collection("Requests").document(myId).collection("Foods")
-                                                            .add(foodmap)
-                                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                @Override
-                                                                public void onSuccess(DocumentReference documentReference) {
-                                                                    Toast.makeText(CartActivity.this,"added food to requests data",Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            });
-                                                }
 
-                                            }
-
-                                        });
 
                             }
                         } else {
@@ -552,10 +609,6 @@ public class CartActivity extends AppCompatActivity{
                         }
                     }
                 });
-
-
-
-
         orderList.clear();
 
 
@@ -647,6 +700,36 @@ public class CartActivity extends AppCompatActivity{
             }
         }).attachToRecyclerView(recylerView);
 
+    }
+
+    boolean isNowBetweenDateTime(final Date s, final Date e) {
+        final Date now = new Date();
+        return now.after(s) && now.before(e);
+    }
+
+    public GeoPoint getLocationFromAddress(String strAddress){
+
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+        GeoPoint p1 = null;
+
+        try {
+            address = coder.getFromLocationName(strAddress,5);
+            if (address==null) {
+                return null;
+            }
+            Address location=address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new GeoPoint((double) (location.getLatitude() * 1E6),
+                    (double) (location.getLongitude() * 1E6));
+
+            return p1;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
