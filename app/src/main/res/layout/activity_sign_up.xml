@@ -4,52 +4,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/logo"
+    android:background="@color/secondary"
     tools:context="com.example.user.bogartsbentelogmobile.SignUp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/btnSignUp">
-
-
-        <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_centerInParent="true">
+        <ImageView
+            android:id="@+id/imageView3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/edtemail"
-            android:hint="Enter your Email"
-            android:textColor="@android:color/white"
-            android:textSize="34dp"
-            android:inputType="textLongMessage"
-            />
+            android:layout_height="160dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="10dp"
+            android:adjustViewBounds="false"
+            android:contentDescription="@string/app_name"
+            android:cropToPadding="true"
+            android:padding="0dp"
+            android:paddingStart="28dp"
+            android:paddingEnd="30dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/app_logo" />
 
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/edtpassword"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your Password"
-            android:inputType="textPassword"
-            android:textColor="@android:color/white"
-            android:textSize="34dp" />
+            android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/edtemail"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/rounded_input"
+                android:hint="Enter your Email"
+                android:inputType="textLongMessage"
+                android:padding="10dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
 
+            <EditText
+                android:id="@+id/edtpassword"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtemail"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="51dp"
+                android:background="@drawable/rounded_input"
+                android:hint="Enter your Password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <info.hoang8f.widget.FButton
+                android:id="@+id/btnSignUp"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="102dp"
+                android:layout_marginBottom="40dp"
+                android:text="Create Account"
+                android:textColor="@android:color/white"
+                app:buttonColor="@color/primary"
+                app:cornerRadius="8dp" />
+        </RelativeLayout>
     </LinearLayout>
-    <info.hoang8f.widget.FButton
-        android:id="@+id/btnSignUp"
-        android:text = "Register"
-        android:textColor="@android:color/white"
-        android:layout_margin="8dp"
-        app:buttonColor="@color/btnSignUp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_alignParentBottom="true"
-        android:layout_weight="1"
-        />
 
 </RelativeLayout>

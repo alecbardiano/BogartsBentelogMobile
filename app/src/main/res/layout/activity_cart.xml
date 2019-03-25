@@ -4,79 +4,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:padding="0dp"
     tools:context="com.example.user.bogartsbentelogmobile.CartActivity">
 
 
-
     <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
         android:id="@+id/recycle_cart"
-        android:background="@android:color/transparent"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp">
 
     </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/textview1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="hello lat long" />
-
-
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="hello lat long" />
 
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        app:cardBackgroundColor="@color/colorPrimary"
-        android:layout_height="100dp">
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        app:cardBackgroundColor="@color/secondary">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="500dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_margin="8dp"
                 android:layout_height="wrap_content"
-                >
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
                     android:text="Total: "
-                    android:textSize="20sp"
                     android:textColor="@android:color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:text="1000"
                     android:id="@+id/totalPriceCart"
-                    android:textSize="20sp"
-                    android:textColor="@android:color/white"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
+                    android:layout_height="wrap_content"
+                    android:text="1000"
+                    android:textColor="@android:color/white"
+                    android:textSize="19sp" />
 
 
             </LinearLayout>
 
             <info.hoang8f.widget.FButton
                 android:id="@+id/buttonPlaceOrder"
-                android:text = "Place Order"
-                android:textColor="@android:color/white"
-                android:layout_margin="8dp"
-                app:buttonColor="@color/btnSignIn"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="55dp"
+                android:layout_marginEnd="15dp"
                 android:layout_weight="1"
-                />
+                android:text="Place Order"
+                android:textColor="@color/colorWhite"
+                app:buttonColor="#1b1b1b"
+                app:shadowColor="@color/colorPrimaryDark" />
 
         </RelativeLayout>
 

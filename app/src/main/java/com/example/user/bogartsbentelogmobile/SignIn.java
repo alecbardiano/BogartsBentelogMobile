@@ -52,8 +52,8 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        edtPassword = (MaterialEditText)findViewById(R.id.edtpassword);
-        edtEmail = (MaterialEditText)findViewById(R.id.edtemail);
+        edtPassword = (EditText)findViewById(R.id.edtpassword);
+        edtEmail = (EditText)findViewById(R.id.edtemail);
         signIn = (Button)findViewById(R.id.btnSignIn);
 
         firebaseAuth = FirebaseAuth.getInstance();
