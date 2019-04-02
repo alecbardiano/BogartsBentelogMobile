@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by user on 2/13/2019.
  */
 
-public class Database extends SQLiteAssetHelper {
+public class    Database extends SQLiteAssetHelper {
 
     private static final String Database_Name = "BogartsDB.db";
     private static final int DatabaseVersion = 1;

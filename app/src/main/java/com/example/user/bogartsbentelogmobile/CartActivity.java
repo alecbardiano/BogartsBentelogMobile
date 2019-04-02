@@ -90,14 +90,14 @@ public class CartActivity extends AppCompatActivity{
     RecyclerView recylerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     final DocumentReference ref = db.collection("Users").document(currUser.getID());
-    int totalPriceOfFoods;
+    int totalPriceOfFoods, totalPriceOfFoodsTakeout, grandTotal;
     final ArrayList<Order> orderList = new ArrayList<>();
 
     private GoogleMap mMap;
     Location currLocation = new Location("YOU");
     TextView txtLat;
 
-    TextView totalPrice;
+    TextView totalPrice, totalPriceTakeout, subTotal;
     FButton buttonPlaceOrder;
     AlertDialog.Builder alertConfirm, alertConfirmAddress, alertConfirm2, alertConfirmDeleteFoodInCart;
 
@@ -129,20 +129,19 @@ public class CartActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_cart);
-//        setSupportActionBar(myToolbar);
-//
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setTitle("My Cart");
-//        }
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_cart);
+        setSupportActionBar(myToolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("My Cart");
+        }
 
         totalPrice = (TextView) findViewById(R.id.totalPriceCart);
+        totalPriceTakeout = (TextView) findViewById(R.id.totalPriceOfTakeout);
+        subTotal = (TextView) findViewById(R.id.subTotal);
         buttonPlaceOrder = (FButton) findViewById(R.id.buttonPlaceOrder);
         txtLat = (TextView)findViewById(R.id.textview1);
-
-        Date currentTime = Calendar.getInstance().getTime();
-
 
 
 
@@ -230,7 +229,7 @@ public class CartActivity extends AppCompatActivity{
                         Log.d("CartActivity", "OPEN STORE");
                         alertConfirmAddress = new AlertDialog.Builder(CartActivity.this);
                         alertConfirmAddress.setTitle("Please Confirm Address");
-                        alertConfirmAddress.setMessage("Deliver to your current location?");
+                        alertConfirmAddress.setMessage("Deliver to your current location? " + currUser.getAddress());
 
 
                         alertConfirmAddress.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -243,10 +242,10 @@ public class CartActivity extends AppCompatActivity{
 
                                 alertConfirm2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        if (totalPriceOfFoods <= 100) {
+                                        if (grandTotal <= 100) {
                                             Toast.makeText(CartActivity.this, "Total price must be greater than or equal to 100", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            addCartToRequest(totalPriceOfFoods);
+                                            addCartToRequest(grandTotal);
                                         }
                                     }
                                 });
@@ -276,11 +275,11 @@ public class CartActivity extends AppCompatActivity{
                                 alertConfirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        if (totalPriceOfFoods <= 100) {
+                                        if (grandTotal <= 100) {
                                             Toast.makeText(CartActivity.this, "Total price must be greater than or equal to 100", Toast.LENGTH_SHORT).show();
 
                                         } else {
-                                            addCartToRequest(totalPriceOfFoods, editAddress.getText().toString());
+                                            addCartToRequest(grandTotal, editAddress.getText().toString());
                                         }
                                     }
                                 });
@@ -418,6 +417,7 @@ public class CartActivity extends AppCompatActivity{
 
                            float minDistance = 0;
                            String nameOfBranch = "";
+                           String idOfBranch = "";
                            int ite =0;
                            for (QueryDocumentSnapshot document : task.getResult()) {
 
@@ -432,23 +432,25 @@ public class CartActivity extends AppCompatActivity{
                                    Log.d("minDistance",  " Minimum Distance " + minDistance);
                                    if (ite == 0){
                                        minDistance = result[0];
-                                       nameOfBranch = store.getStoreID();
+                                       idOfBranch = store.getStoreID();
+                                       nameOfBranch = store.getNameOfBranch();
                                        ite +=1;
                                        continue;
                                    }
                                    if ( minDistance > result[0]){
                                        minDistance = result[0];
-                                       nameOfBranch = store.getStoreID();
-                                   }else{
-                                       minDistance = minDistance;
+                                       idOfBranch = store.getStoreID();
+                                       nameOfBranch = store.getNameOfBranch();
                                    }
                                }
                            }
+
                            Log.d("nameOfBranch",  " Minimum Distance " + nameOfBranch);
                            Log.d("minDistance",  " Last Minimum Distance " + minDistance);
                            if(minDistance >= 3000.00){
                                Toast.makeText(CartActivity.this,"Sorry you are to far from our stores",Toast.LENGTH_SHORT).show();
                            }else{
+                               final String finalIdOfBranch = idOfBranch;
                                final String finalNameOfBranch = nameOfBranch;
                                db.collection("Users").document(currUser.getID()).collection("Cart")
                                        .get()
@@ -473,20 +475,35 @@ public class CartActivity extends AppCompatActivity{
                                                                    db.collection("Requests").document(myId)
                                                                            .update(
                                                                                    "orderID", myId,
-                                                                                   "storeID", finalNameOfBranch
+                                                                                   "storeID", finalIdOfBranch,
+                                                                                   "storeName", finalNameOfBranch
                                                                            );
 
                                                                    for(int i =0; i< orderList.size(); i++){
                                                                        Map<String, Object> foodmap = new HashMap<>();
-                                                                       foodmap.put("Name", orderList.get(i).getProductName());
+                                                                       foodmap.put("ProductName", orderList.get(i).getProductName());
                                                                        foodmap.put("Price", orderList.get(i).getPrice());
                                                                        foodmap.put("Quantity", orderList.get(i).getQuantity());
+                                                                       foodmap.put("ProductID", orderList.get(i).getProductID());
                                                                        db.collection("Requests").document(myId).collection("Foods")
                                                                                .add(foodmap)
                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                                    @Override
                                                                                    public void onSuccess(DocumentReference documentReference) {
-                                                                                       Toast.makeText(CartActivity.this,"added food to requests data",Toast.LENGTH_SHORT).show();
+                                                                                       db.collection("Users").document(currUser.getID()).collection("Cart")
+                                                                                               .get()
+                                                                                               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                                                   @Override
+                                                                                                   public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                                       if (task.isSuccessful()) {
+                                                                                                           for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                                                               document.getReference().delete();
+                                                                                                           }
+                                                                                                       } else {
+                                                                                                           Log.d("CartActivity", "Error getting documents: ", task.getException());
+                                                                                                       }
+                                                                                                   }
+                                                                                               });
                                                                                    }
                                                                                });
                                                                    }
@@ -505,11 +522,6 @@ public class CartActivity extends AppCompatActivity{
                        }
                    }
                });
-
-
-
-
-        orderList.clear();
 
 
     }
@@ -538,17 +550,34 @@ public class CartActivity extends AppCompatActivity{
                             float[] result = new float[1];
                             float minDistance = 0;
                             String nameOfBranch ="";
+                            int ite =0;
+                            String idOfBranch ="";
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if(document.exists()){
                                     Log.d("SearchStore", document.getId() + " => " + document.getData());
-                                    GeoPoint geo = getLocationFromAddress(address);
-                                    String name = document.getString("storeID");
+                                    Store store = document.toObject(Store.class);
+                                    GeoPoint geo = document.getGeoPoint("location");
                                     double lat = geo.getLatitude();
                                     double lng = geo.getLongitude();
-                                    Location.distanceBetween(lat,lng,currLocation.getLatitude(),currLocation.getLongitude(),result);
-                                    if ( minDistance < result[0]){
+//                                    GeoPoint geo = getLocationFromAddress(address);
+//                                    double lat = geo.getLatitude();
+//                                    double lng = geo.getLongitude();
+                                    GeocodingLocation locationAddress = new GeocodingLocation();
+                                    locationAddress.getAddressFromLocation(address, getApplicationContext(), new GeocoderHandler());
+                                    Location.distanceBetween(lat,lng,locationAddress.getLatitu(),locationAddress.getLongitu(),result);
+                                    Log.d("GEO", String.valueOf(locationAddress.getLatitu()) + String.valueOf(locationAddress.getLongitu()));
+                                    if (ite == 0){
                                         minDistance = result[0];
-                                        nameOfBranch = name;
+                                        idOfBranch = store.getStoreID();
+                                        nameOfBranch = store.getNameOfBranch();
+                                        ite +=1;
+                                        continue;
+                                    }
+                                    if ( minDistance > result[0]){
+                                        minDistance = result[0];
+                                        idOfBranch = store.getStoreID();
+                                        nameOfBranch = store.getNameOfBranch();
+                                        ite +=1;
                                     }
                                 }
                             }
@@ -557,6 +586,7 @@ public class CartActivity extends AppCompatActivity{
                                 return;
                             }else{
                                 final String finalNameOfBranch = nameOfBranch;
+                                final String finalIdOfBranch = idOfBranch;
                                 db.collection("Users").document(currUser.getID()).collection("Cart")
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -577,41 +607,50 @@ public class CartActivity extends AppCompatActivity{
                                                                     db.collection("Requests").document(myId)
                                                                             .update(
                                                                                     "orderID", myId,
-                                                                                    "storeID", finalNameOfBranch
+                                                                                    "storeID", finalIdOfBranch,
+                                                                                    "storeName", finalNameOfBranch
                                                                             );
                                                                     for(int i =0; i< orderList.size(); i++){
                                                                         Map<String, Object> foodmap = new HashMap<>();
-                                                                        foodmap.put("Name", orderList.get(i).getProductName());
+                                                                        foodmap.put("ProductName", orderList.get(i).getProductName());
                                                                         foodmap.put("Price", orderList.get(i).getPrice());
                                                                         foodmap.put("Quantity", orderList.get(i).getQuantity());
+                                                                        foodmap.put("ProductID", orderList.get(i).getProductID());
                                                                         db.collection("Requests").document(myId).collection("Foods")
                                                                                 .add(foodmap)
                                                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                                     @Override
                                                                                     public void onSuccess(DocumentReference documentReference) {
-                                                                                        Toast.makeText(CartActivity.this,"added food to requests data",Toast.LENGTH_SHORT).show();
+                                                                                        db.collection("Users").document(currUser.getID()).collection("Cart")
+                                                                                                .get()
+                                                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                                                    @Override
+                                                                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                                                        if (task.isSuccessful()) {
+                                                                                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                                                                document.getReference().delete();
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            Log.d("CartActivity", "Error getting documents: ", task.getException());
+                                                                                                        }
+                                                                                                    }
+                                                                                                });
                                                                                     }
                                                                                 });
                                                                     }
                                                                 }
-
                                                             });
                                                 } else {
                                                     Log.d("REQUESTS", "Error getting documents: ", task.getException());
                                                 }
                                             }
                                         });
-
-
                             }
                         } else {
                             Log.d("SearchStore", "Error getting documents: ", task.getException());
                         }
                     }
                 });
-        orderList.clear();
-
-
     }
 
 
@@ -624,6 +663,7 @@ public class CartActivity extends AppCompatActivity{
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
                         totalPriceOfFoods = 0;
+                        totalPriceOfFoodsTakeout = 0;
                         if (e != null) {
                             return;
                         }
@@ -635,11 +675,14 @@ public class CartActivity extends AppCompatActivity{
                                 continue;
                             }
                             totalPriceOfFoods += (Integer.parseInt(order.getPrice()) * (Integer.parseInt(order.getQuantity())));
+                            totalPriceOfFoodsTakeout +=  (5 * (Integer.parseInt(order.getQuantity())));
                         }
-
+                        grandTotal = totalPriceOfFoods + totalPriceOfFoodsTakeout;
                         Locale locale = new Locale("tl", "PH");
                         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
-                        totalPrice.setText(format.format(totalPriceOfFoods));
+                        subTotal.setText(format.format(totalPriceOfFoods));
+                        totalPriceTakeout.setText(format.format(totalPriceOfFoodsTakeout));
+                        totalPrice.setText(format.format(grandTotal));
                     }
                 });
         FirestoreRecyclerOptions<Order> options = new FirestoreRecyclerOptions.Builder<Order>()
@@ -702,35 +745,31 @@ public class CartActivity extends AppCompatActivity{
 
     }
 
-    boolean isNowBetweenDateTime(final Date s, final Date e) {
-        final Date now = new Date();
-        return now.after(s) && now.before(e);
-    }
 
-    public GeoPoint getLocationFromAddress(String strAddress){
-
-        Geocoder coder = new Geocoder(this);
-        List<Address> address;
-        GeoPoint p1 = null;
-
-        try {
-            address = coder.getFromLocationName(strAddress,5);
-            if (address==null) {
-                return null;
-            }
-            Address location=address.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            p1 = new GeoPoint((double) (location.getLatitude() * 1E6),
-                    (double) (location.getLongitude() * 1E6));
-
-            return p1;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public GeoPoint getLocationFromAddress(String strAddress){
+//
+//        Geocoder coder = new Geocoder(this);
+//        List<Address> address;
+//        GeoPoint p1 = null;
+//
+//        try {
+//            address = coder.getFromLocationName(strAddress,5);
+//            if (address==null) {
+//                return null;
+//            }
+//            Address location=address.get(0);
+//            location.getLatitude();
+//            location.getLongitude();
+//
+//            p1 = new GeoPoint((double) (location.getLatitude() * 1E6),
+//                    (double) (location.getLongitude() * 1E6));
+//
+//            return p1;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

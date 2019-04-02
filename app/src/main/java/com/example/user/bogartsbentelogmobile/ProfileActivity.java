@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 import java.util.Date;
@@ -134,6 +135,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
 
+
         String email = fUser.getEmail();
         String id = fUser.getUid();
 
@@ -149,6 +151,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         user.put("email", email);
         user.put("id", id);
         user.put("isStaff", false);
+
         users.document(id).set(user);
     }
 

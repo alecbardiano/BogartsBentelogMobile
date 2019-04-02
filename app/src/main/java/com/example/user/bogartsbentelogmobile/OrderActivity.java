@@ -9,11 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.user.bogartsbentelogmobile.Interface.ItemClickListener;
 import com.example.user.bogartsbentelogmobile.Model.Order;
 import com.example.user.bogartsbentelogmobile.Model.Request;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -68,8 +71,7 @@ public class OrderActivity extends AppCompatActivity {
                 .setQuery(query,Request.class)
                 .build();
 
-        adapter = new RecyclerOrderAdapter(options,this);
-        recylerView.setAdapter(adapter);
+
 
         reqRef.whereEqualTo("userID", currUser.getID()).orderBy("dateOfOrder",Query.Direction.DESCENDING).limit(10)
         .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -81,6 +83,21 @@ public class OrderActivity extends AppCompatActivity {
                 }
             }
         });
+
+        adapter = new RecyclerOrderAdapter(options,this);
+        adapter.setOnItemClickListener(new ItemClickListener() {
+            @Override
+            public void onClickItemListener(DocumentSnapshot snapshot, int position) {
+                String id = snapshot.getId();
+
+                Intent orderRequest = new Intent(OrderActivity.this,OrderRequest.class);
+                orderRequest.putExtra("orderID", id);
+                Toast.makeText(OrderActivity.this, "foodid"+ id, Toast.LENGTH_SHORT).show();
+                startActivity(orderRequest);
+
+            }
+        });
+        recylerView.setAdapter(adapter);
 
 
     }

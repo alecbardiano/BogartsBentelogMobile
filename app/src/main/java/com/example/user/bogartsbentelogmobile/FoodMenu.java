@@ -38,141 +38,32 @@ public class FoodMenu extends AppCompatActivity {
     private MaterialSearchBar materialSearchBar;
     RecyclerView recylerView;
     List<String> searchList =  new ArrayList<>();
-    String categoryID;
+    String categoryID, categName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_menu);
 
+        if(getIntent() != null){
+            categoryID = getIntent().getStringExtra("CategID");
+            categName = getIntent().getStringExtra("CategName");
+            Toast.makeText(FoodMenu.this,"id " +categoryID,Toast.LENGTH_SHORT).show();
+        }
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_foodmenu);
         setSupportActionBar(myToolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Food");
+            getSupportActionBar().setTitle(categName);
         }
         setUpRecyclerView();
-
-        if(getIntent() != null){
-            categoryID = getIntent().getStringExtra("CategID");
-            Toast.makeText(FoodMenu.this,"id " +categoryID,Toast.LENGTH_SHORT).show();
-        }
         loadFoodData(categoryID);
 
-        // Search Food Function
-
-
-//        setupSearchBar();
-//        loadSearch();
-
-
-
-
-//        addCategorySample();
 
     }
 
-    private void setupSearchBar() {
-
-//        materialSearchBar = (MaterialSearchBar)findViewById(R.id.searchBar);
-        materialSearchBar.setHint("Enter food");
-        materialSearchBar.setLastSuggestions(searchList);
-        materialSearchBar.setCardViewElevation(10);
-        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener(){
-
-            @Override
-            public void onSearchStateChanged(boolean enabled) {
-                if(!enabled){
-                    recylerView.setAdapter(adapter);
-                }
-
-            }
-
-            @Override
-            public void onSearchConfirmed(CharSequence text) {
-                startSearch(text);
-
-            }
-
-            @Override
-            public void onButtonClicked(int buttonCode) {
-
-            }
-        });
-        materialSearchBar.addTextChangeListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                List<String> suggest = new ArrayList<String>();
-                for (String search :searchList){
-                    if(search.toLowerCase().contains(materialSearchBar.getText().toLowerCase())){
-                        suggest.add(search);
-                    }
-
-                }
-                materialSearchBar.setLastSuggestions(suggest);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-    }
-
-    private void startSearch(CharSequence text) {
-        Query query = db.collection("Food").whereEqualTo("Name", text.toString());
-
-        FirestoreRecyclerOptions<Food> options = new FirestoreRecyclerOptions.Builder<Food>()
-                .setQuery(query,Food.class)
-                .build();
-
-
-        adapter = new RecyclerFoodAdapter(options,this);
-        adapter.setOnItemClickListener(new ItemClickListener() {
-            @Override
-            public void onClickItemListener(DocumentSnapshot snapshot, int position) {
-                String id = snapshot.getId();
-
-                Intent foodDetail = new Intent(FoodMenu.this,FoodDetail.class);
-                foodDetail.putExtra("FoodID", id);
-                Toast.makeText(FoodMenu.this, "foodid"+ id, Toast.LENGTH_SHORT).show();
-                startActivity(foodDetail);
-
-            }
-        });
-        recylerView.setAdapter(adapter);
-    }
-
-
-    private void loadSearch() {
-
-        db.collection("Food")
-                .whereEqualTo("CategID", categoryID)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Food food = document.toObject(Food.class);
-                                searchList.add(food.getName());
-
-                            }
-                        } else {
-//                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -230,7 +121,6 @@ public class FoodMenu extends AppCompatActivity {
     protected void onStart (){
         super.onStart();
         adapter.startListening();
-//        searchAdapter.startListening();
 
     }
 
@@ -238,7 +128,6 @@ public class FoodMenu extends AppCompatActivity {
     protected void onStop (){
         super.onStop();
         adapter.stopListening();
-//        searchAdapter.stopListening();
 
     }
 }

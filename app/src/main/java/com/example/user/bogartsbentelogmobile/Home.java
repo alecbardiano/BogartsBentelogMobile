@@ -61,6 +61,8 @@ public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth.AuthStateListener  authStateListener;
+
     //    public TextView txtFirst;
     TextView txt_first;
     private RecyclerCategoryAdapter adapter;
@@ -68,6 +70,7 @@ public class Home extends AppCompatActivity
     RecyclerView recylerView;
     ArrayList<Category> categArrayList;
     final CollectionReference categRef = db.collection("Category");
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,8 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
         setSupportActionBar(toolbar);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -209,9 +214,12 @@ public class Home extends AppCompatActivity
             @Override
             public void onClickItemListener(DocumentSnapshot snapshot, int position) {
                 String id = snapshot.getId();
+                Category categ = snapshot.toObject(Category.class);
+                String nameCateg = categ.getName();
 
                 Intent foodMenu = new Intent(Home.this, FoodMenu.class);
                 foodMenu.putExtra("CategID", id);
+                foodMenu.putExtra("CategName", nameCateg);
                 Toast.makeText(Home.this, "categid" + id, Toast.LENGTH_SHORT).show();
                 startActivity(foodMenu);
 
@@ -283,9 +291,11 @@ public class Home extends AppCompatActivity
             startActivity(new Intent(Home.this, FranchiseActivity.class));
         }
         else if (id == R.id.nav_log_out) {
+            firebaseAuth.signOut();
             Intent signIn = new Intent(Home.this, MainActivity.class);
             signIn.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(signIn);
+            finish();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

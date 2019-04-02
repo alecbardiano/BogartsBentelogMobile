@@ -39,7 +39,9 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Transaction;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -75,8 +77,7 @@ public class FoodDetail extends AppCompatActivity {
         food_price = (TextView)findViewById(R.id.food_detail_price);
         food_Image = (ImageView)findViewById(R.id.food_detail_img);
 
-//        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_foodDetail);
-//        setSupportActionBar(myToolbar);
+
 
 
 
@@ -88,7 +89,8 @@ public class FoodDetail extends AppCompatActivity {
             foodID = getIntent().getStringExtra("FoodID");
             Toast.makeText(FoodDetail.this,"id " +foodID,Toast.LENGTH_SHORT).show();
         }
-
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_foodDetail);
+        setSupportActionBar(myToolbar);
         getDetailFood(foodID);
 
         cartButton = findViewById(R.id.btnCart);
@@ -106,10 +108,7 @@ public class FoodDetail extends AppCompatActivity {
             }
         });
 
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setTitle(currFood.getName());
-//        }
+
 
     }
 
@@ -132,14 +131,24 @@ public class FoodDetail extends AppCompatActivity {
                         .skipMemoryCache(false)  //No memory cache
                         .diskCacheStrategy(DiskCacheStrategy.ALL)   //No disk cache
                         .into(food_Image);
-
-                food_price.setText(currFood.getPrice());
+                Locale locale = new Locale("tl", "PH");
+                NumberFormat format = NumberFormat.getCurrencyInstance(locale);
+                food_price.setText(format.format(Integer.parseInt(currFood.getPrice())));
                 food_Desc.setText(currFood.getDescription());
                 food_Name.setText(currFood.getName());
                 collapsingToolbarLayout.setTitle(currFood.getName());
 
+
+
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    getSupportActionBar().setTitle(currFood.getName());
+                }
+
             }
         });
+
+
 
     }
 

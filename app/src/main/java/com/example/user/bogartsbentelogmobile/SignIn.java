@@ -15,6 +15,10 @@ import android.widget.Toast;
 import com.example.user.bogartsbentelogmobile.Common.Common;
 import com.example.user.bogartsbentelogmobile.Model.Food;
 import com.example.user.bogartsbentelogmobile.Model.User;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -34,13 +38,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Map;
 
-public class SignIn extends AppCompatActivity implements View.OnClickListener{
+public class SignIn extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener{
     private static final String TAG = "MainActivity";
 
-
+    private static final int RC_SIGN_IN = 9001;
     private EditText edtEmail, edtPassword;
     private Button signIn;
-
+    GoogleApiClient mGoogleApiClient;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -58,9 +62,19 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
 
         firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null){
-
-
+            startActivity(new Intent(getApplicationContext(), Home.class));
+            finish();
         }
+
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
+//
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .enableAutoManage(SignIn.this,this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+//                .build();
 
         signIn.setOnClickListener(this);
 
@@ -81,6 +95,11 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
             userLogIn();
         }
     }
+
+//    private void signIn() {
+//        Intent signIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+//        startActivityForResult(signIntent,RC_SIGN_IN);
+//    }
     private void userLogIn(){
 
         final String email = edtEmail.getText().toString().trim();
@@ -114,7 +133,6 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                         if (task.isSuccessful()) {
                                             boolean isEmpty = task.getResult().isEmpty();
-
                                             if (isEmpty){
                                                 User user = new User();
                                                 Common.currUser = user;
@@ -146,5 +164,8 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener{
             }
 
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
 }

@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.user.bogartsbentelogmobile.Common.Common;
+import com.example.user.bogartsbentelogmobile.Interface.ItemClickListener;
 import com.example.user.bogartsbentelogmobile.Model.Request;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.example.user.bogartsbentelogmobile.Model.Order;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -22,9 +24,10 @@ import java.util.Locale;
  * Created by user on 2/27/2019.
  */
 
-public class RecyclerOrderAdapter extends FirestoreRecyclerAdapter<Request,RecyclerOrderHolder> {
+public class RecyclerOrderAdapter extends FirestoreRecyclerAdapter<Request,RecyclerOrderHolder> implements ItemClickListener {
 
     private Context context;
+    private ItemClickListener listener;
 
     public RecyclerOrderAdapter(@NonNull FirestoreRecyclerOptions<Request> options, Context context) {
         super(options);
@@ -32,7 +35,7 @@ public class RecyclerOrderAdapter extends FirestoreRecyclerAdapter<Request,Recyc
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull RecyclerOrderHolder holder, int position, @NonNull Request model) {
+    protected void onBindViewHolder(@NonNull RecyclerOrderHolder holder, final int position, @NonNull Request model) {
 
         Locale locale = new Locale("tl", "PH");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
@@ -43,7 +46,13 @@ public class RecyclerOrderAdapter extends FirestoreRecyclerAdapter<Request,Recyc
         holder.reqStatusOfOrder.setText(Common.convertCodeToStatus(model.getStatus()));
         String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(model.getDateOfOrder());
         holder.reqDateOfOrder.setText(currentDateTimeString);
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                onItemClickListner.onClick(data);
+                listener.onClickItemListener(getSnapshots().getSnapshot(position),position);
+            }
+        });
 
 
     }
@@ -57,6 +66,15 @@ public class RecyclerOrderAdapter extends FirestoreRecyclerAdapter<Request,Recyc
         View view = layoutInflater.inflate(R.layout.single_request,parent,false);
 
         return new RecyclerOrderHolder(view);
+
+    }
+
+    public void setOnItemClickListener(ItemClickListener listener){
+        this.listener = listener;
+    }
+
+    @Override
+    public void onClickItemListener(DocumentSnapshot snapshot, int position) {
 
     }
 }

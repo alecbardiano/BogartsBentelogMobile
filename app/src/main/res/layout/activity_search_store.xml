@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context="com.example.user.bogartsbentelogmobile.SearchStore"
@@ -10,8 +11,8 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar_searchstore"
-            android:layout_width="368dp"
-            android:layout_height="56dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:elevation="4dp"
             android:titleTextColor="@android:color/white"
             android:theme="@style/ToolbarStyle"
@@ -19,21 +20,18 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="0dp" />
 
-    <fragment
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_store_menu"
         android:layout_width="368dp"
-        android:layout_height="495dp"
+        android:layout_height="551dp"
         android:scrollbars="vertical"
 
         tools:layout_editor_absoluteX="-19dp"
         tools:layout_editor_absoluteY="-29dp">
 
     </android.support.v7.widget.RecyclerView>
+
+
 
 </LinearLayout>

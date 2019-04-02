@@ -59,11 +59,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class SearchStore extends AppCompatActivity implements
-        OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+public class SearchStore extends AppCompatActivity {
 
     private GoogleMap mMap;
     private GoogleApiClient googApi;
@@ -93,9 +89,6 @@ public class SearchStore extends AppCompatActivity implements
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
 
         setUpRecyclerView();
         loadStoreData();
@@ -119,18 +112,17 @@ public class SearchStore extends AppCompatActivity implements
 
 
         adapter = new RecyclerStoreAdapter(options);
-//        adapter.setOnItemClickListener(new ItemClickListener() {
-//            @Override
-//            public void onClickItemListener(DocumentSnapshot snapshot, int position) {
-//                String id = snapshot.getId();
-//
-//                Intent foodDetail = new Intent(SearchFood.this,FoodDetail.class);
-//                foodDetail.putExtra("FoodID", id);
-//                Toast.makeText(SearchFood.this, "foodid"+ id, Toast.LENGTH_SHORT).show();
-//                startActivity(foodDetail);
-//
-//            }
-//        });
+        adapter.setOnItemClickListener(new ItemClickListener() {
+            @Override
+            public void onClickItemListener(DocumentSnapshot snapshot, int position) {
+                String id = snapshot.getId();
+                Intent storeDetail = new Intent(SearchStore.this,StoreDetail.class);
+                storeDetail.putExtra("StoreID", id);
+                Toast.makeText(SearchStore.this, "Storeid"+ id, Toast.LENGTH_SHORT).show();
+                startActivity(storeDetail);
+
+            }
+        });
 
 
         recylerView.setAdapter(adapter);
@@ -216,65 +208,6 @@ public class SearchStore extends AppCompatActivity implements
         Intent i = new Intent(SearchStore.this, Home.class);
         startActivity(i);
 
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        LatLng laguna = new LatLng(14.1877, 121.1251);
-//        mMap.addMarker(new MarkerOptions().position(manila).title("Marker in Manila"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(laguna));
-        mMap.animateCamera( CameraUpdateFactory.zoomTo( 10.0f ) );
-
-        db.collection("Stores")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(document.exists()){
-                                    Log.d("SearchStore", document.getId() + " => " + document.getData());
-                                    GeoPoint geo = document.getGeoPoint("location");
-                                    String name = document.getString("nameOfBranch");
-                                    double lat = geo.getLatitude();
-                                    double lng = geo.getLongitude();
-                                    LatLng latLng = new LatLng(lat, lng);
-                                    mMap.addMarker(new MarkerOptions().position(latLng).title(name));
-//                                    mMap.addCircle(new CircleOptions().center(latLng).radius(3000)
-//                                            .strokeColor(Color.BLUE)
-//                                            .fillColor(0x220000)
-//                                            .strokeWidth(5.0f));
-                                }
-
-                            }
-                        } else {
-                            Log.d("SearchStore", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
     }
 
     protected void onStart (){
